@@ -1,11 +1,7 @@
 /app/config/parameters.yml
 /build/
 /phpunit.xml
-var/cache
-var/logs
-var/sessions
-var/bootstrap.php.cache
-var/SymfonyRequirements.php
+var/
 /vendor/
 /web/bundles/
 bin/
