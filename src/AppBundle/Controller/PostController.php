@@ -5,7 +5,8 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Post;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Post controller.
@@ -88,7 +89,8 @@ class PostController extends Controller
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('post_edit', array('id' => $post->getId()));
+            //return $this->redirectToRoute('post_show', array('id' => $post->getId()));
+            return $this->showAction($post);
         }
 
         return $this->render('post/edit.html.twig', array(
@@ -130,7 +132,6 @@ class PostController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('post_delete', array('id' => $post->getId())))
             ->setMethod('DELETE')
-            ->getForm()
-        ;
+            ->getForm();
     }
 }
