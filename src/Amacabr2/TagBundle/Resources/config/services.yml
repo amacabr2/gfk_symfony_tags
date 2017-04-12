@@ -1,4 +1,6 @@
 services:
-#    tag.example:
-#        class: Amacabr2\TagBundle\Example
-#        arguments: ["@service_id", "plain_value", "%parameter%"]
+    tag.form.type.tags:
+        class: Amacabr2\TagBundle\Form\Type\TagsType
+        arguments: ['@doctrine.orm.entity_manager']
+        tags:
+              - {name: form.type}
