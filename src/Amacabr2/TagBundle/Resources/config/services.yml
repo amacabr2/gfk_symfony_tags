@@ -1,0 +1,4 @@
+services:
+#    tag.example:
+#        class: Amacabr2\TagBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]
