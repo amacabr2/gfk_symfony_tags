@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Amacabr2\TagBundle\Concern\Taggable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,8 +11,10 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="post")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\PostRepository")
  */
-class Post
-{
+class Post {
+
+    use Taggable;
+
     /**
      * @var int
      *
@@ -37,12 +40,19 @@ class Post
 
 
     /**
+     * Constructor
+     */
+    public function __construct() {
+        $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+
+    /**
      * Get id
      *
      * @return int
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -53,8 +63,7 @@ class Post
      *
      * @return Post
      */
-    public function setName($name)
-    {
+    public function setName($name) {
         $this->name = $name;
 
         return $this;
@@ -65,8 +74,7 @@ class Post
      *
      * @return string
      */
-    public function getName()
-    {
+    public function getName() {
         return $this->name;
     }
 
@@ -77,8 +85,7 @@ class Post
      *
      * @return Post
      */
-    public function setContent($content)
-    {
+    public function setContent($content) {
         $this->content = $content;
 
         return $this;
@@ -89,9 +96,8 @@ class Post
      *
      * @return string
      */
-    public function getContent()
-    {
+    public function getContent() {
         return $this->content;
     }
-}
 
+}

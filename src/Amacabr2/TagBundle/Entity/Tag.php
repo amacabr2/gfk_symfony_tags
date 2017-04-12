@@ -10,8 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="tag")
  * @ORM\Entity(repositoryClass="Amacabr2\TagBundle\Repository\TagRepository")
  */
-class Tag
-{
+class Tag {
+
     /**
      * @var int
      *
@@ -34,8 +34,7 @@ class Tag
      *
      * @return int
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -46,8 +45,7 @@ class Tag
      *
      * @return Tag
      */
-    public function setName($name)
-    {
+    public function setName($name) {
         $this->name = $name;
 
         return $this;
@@ -58,9 +56,9 @@ class Tag
      *
      * @return string
      */
-    public function getName()
-    {
+    public function getName() {
         return $this->name;
     }
+
 }
 
