@@ -2,25 +2,27 @@
 
 namespace AppBundle\Form;
 
+use Amacabr2\TagBundle\Form\Type\TagsType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class PostType extends AbstractType
-{
+class PostType extends AbstractType {
+
     /**
      * {@inheritdoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
-        $builder->add('name')->add('content');
+    public function buildForm(FormBuilderInterface $builder, array $options)    {
+        $builder
+            ->add('name')
+            ->add('content')
+            ->add('tags', TagsType::class);
     }
     
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolver $resolver)
-    {
+    public function configureOptions(OptionsResolver $resolver) {
         $resolver->setDefaults(array(
             'data_class' => 'AppBundle\Entity\Post'
         ));
@@ -29,8 +31,7 @@ class PostType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
-    {
+    public function getBlockPrefix() {
         return 'appbundle_post';
     }
 
