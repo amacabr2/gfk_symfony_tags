@@ -21,14 +21,21 @@ class PostController extends Controller {
      * @Route("/", name="post_index")
      * @Method("GET")
      */
-    public function indexAction() {
-        $em = $this->getDoctrine()->getManager();
+    public function indexAction(Request $request) {
 
-        $posts = $em->getRepository('AppBundle:Post')->findLatest();
+        $em = $this->getDoctrine()->getManager();
+        $repository = $em->getRepository('AppBundle:Post');
+
+        if($tag = $request->query->get('tag')) {
+            $posts = $repository->findByTag($tag);
+        } else {
+            $posts = $repository->findLatest();
+        }
 
         return $this->render('post/index.html.twig', array(
             'posts' => $posts,
         ));
+
     }
 
     /**
@@ -36,8 +43,11 @@ class PostController extends Controller {
      *
      * @Route("/new", name="post_new")
      * @Method({"GET", "POST"})
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function newAction(Request $request) {
+
         $post = new Post();
         $form = $this->createForm('AppBundle\Form\PostType', $post);
         $form->handleRequest($request);
@@ -46,7 +56,6 @@ class PostController extends Controller {
             $em = $this->getDoctrine()->getManager();
             $em->persist($post);
             $em->flush();
-
             return $this->redirectToRoute('post_show', array('id' => $post->getId()));
         }
 
@@ -54,6 +63,7 @@ class PostController extends Controller {
             'post' => $post,
             'form' => $form->createView(),
         ));
+
     }
 
     /**
@@ -61,10 +71,11 @@ class PostController extends Controller {
      *
      * @Route("/{id}", name="post_show")
      * @Method("GET")
+     * @param Post $post
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function showAction(Post $post) {
         $deleteForm = $this->createDeleteForm($post);
-
         return $this->render('post/show.html.twig', array(
             'post' => $post,
             'delete_form' => $deleteForm->createView(),
@@ -76,8 +87,12 @@ class PostController extends Controller {
      *
      * @Route("/{id}/edit", name="post_edit")
      * @Method({"GET", "POST"})
+     * @param Request $request
+     * @param Post $post
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function editAction(Request $request, Post $post) {
+
         $deleteForm = $this->createDeleteForm($post);
         $editForm = $this->createForm('AppBundle\Form\PostType', $post);
         $editForm->handleRequest($request);
@@ -94,6 +109,7 @@ class PostController extends Controller {
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
+
     }
 
     /**
@@ -101,8 +117,12 @@ class PostController extends Controller {
      *
      * @Route("/{id}", name="post_delete")
      * @Method("DELETE")
+     * @param Request $request
+     * @param Post $post
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteAction(Request $request, Post $post) {
+
         $form = $this->createDeleteForm($post);
         $form->handleRequest($request);
 
@@ -113,6 +133,7 @@ class PostController extends Controller {
         }
 
         return $this->redirectToRoute('post_index');
+
     }
 
     /**
@@ -128,4 +149,5 @@ class PostController extends Controller {
             ->setMethod('DELETE')
             ->getForm();
     }
+
 }

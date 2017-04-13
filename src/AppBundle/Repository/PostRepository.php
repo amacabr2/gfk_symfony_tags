@@ -12,10 +12,28 @@ use Doctrine\ORM\EntityRepository;
  */
 class PostRepository extends EntityRepository {
 
+    /**
+     * Permet de récupérer les posts et leurs tags en une seule requète
+     * @return array
+     */
     public function findLatest() {
         return $this->createQueryBuilder('p')
             ->select('p, t')
             ->join('p.tags', 't')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Récupère les post par rapport au tag
+     */
+    public function findByTag($name) {
+        return $this->createQueryBuilder('p')
+            ->select('p, t')
+            ->join('p.tags', 't')
+            ->join('p.tags', 'tmp')
+            ->where('tmp.name = :name')
+            ->setParameter('name', $name)
             ->getQuery()
             ->getResult();
     }
