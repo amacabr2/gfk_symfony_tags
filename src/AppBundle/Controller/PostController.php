@@ -13,19 +13,18 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @Route("post")
  */
-class PostController extends Controller
-{
+class PostController extends Controller {
+
     /**
      * Lists all post entities.
      *
      * @Route("/", name="post_index")
      * @Method("GET")
      */
-    public function indexAction()
-    {
+    public function indexAction() {
         $em = $this->getDoctrine()->getManager();
 
-        $posts = $em->getRepository('AppBundle:Post')->findAll();
+        $posts = $em->getRepository('AppBundle:Post')->findLatest();
 
         return $this->render('post/index.html.twig', array(
             'posts' => $posts,
@@ -38,8 +37,7 @@ class PostController extends Controller
      * @Route("/new", name="post_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
-    {
+    public function newAction(Request $request) {
         $post = new Post();
         $form = $this->createForm('AppBundle\Form\PostType', $post);
         $form->handleRequest($request);
@@ -64,8 +62,7 @@ class PostController extends Controller
      * @Route("/{id}", name="post_show")
      * @Method("GET")
      */
-    public function showAction(Post $post)
-    {
+    public function showAction(Post $post) {
         $deleteForm = $this->createDeleteForm($post);
 
         return $this->render('post/show.html.twig', array(
@@ -80,8 +77,7 @@ class PostController extends Controller
      * @Route("/{id}/edit", name="post_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Post $post)
-    {
+    public function editAction(Request $request, Post $post) {
         $deleteForm = $this->createDeleteForm($post);
         $editForm = $this->createForm('AppBundle\Form\PostType', $post);
         $editForm->handleRequest($request);
@@ -106,8 +102,7 @@ class PostController extends Controller
      * @Route("/{id}", name="post_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, Post $post)
-    {
+    public function deleteAction(Request $request, Post $post) {
         $form = $this->createDeleteForm($post);
         $form->handleRequest($request);
 
@@ -127,8 +122,7 @@ class PostController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(Post $post)
-    {
+    private function createDeleteForm(Post $post) {
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('post_delete', array('id' => $post->getId())))
             ->setMethod('DELETE')
