@@ -28,7 +28,7 @@ class TagsTransformer implements DataTransformerInterface {
     }
 
     public function reverseTransform($value): array {
-        $names = explode(',', $value);
+        $names = array_unique(array_filter(array_map('trim', explode(',', $value))));
         $tags = $this->em->getRepository('TagBundle:Tag')->findByName($names);
         $newNames = array_diff($names, $tags);
         foreach ($newNames as $name) {
