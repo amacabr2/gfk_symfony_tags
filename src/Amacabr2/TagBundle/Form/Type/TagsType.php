@@ -8,6 +8,7 @@ use Symfony\Bridge\Doctrine\Form\DataTransformer\CollectionToArrayTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TagsType extends AbstractType {
 
@@ -22,6 +23,10 @@ class TagsType extends AbstractType {
      */
     function __construct(ObjectManager $em) {
         $this->em = $em;
+    }
+
+    public function configureOptions(OptionsResolver $resolver) {
+        $resolver->setDefault('required', false);
     }
 
     public function getParent() {
