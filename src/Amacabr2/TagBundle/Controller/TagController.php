@@ -2,6 +2,7 @@
 
 namespace Amacabr2\TagBundle\Controller;
 
+use AppBundle\Entity\Post;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,12 +16,16 @@ class TagController extends Controller {
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
     public function indexAction(Request $request) {
+
         $tagRepository = $this->getDoctrine()->getRepository('TagBundle:Tag');
+
         if ($q = $request->get('q')) {
             $tags = $tagRepository->search($q);
         } else {
             $tags = $tagRepository->findAll();
         }
+
+        $unusedTags = $tagRepository->findUnusedTags(Post::class);
 
         return $this->json($tags, 200, [], ['groups' => ['public']]);
     }

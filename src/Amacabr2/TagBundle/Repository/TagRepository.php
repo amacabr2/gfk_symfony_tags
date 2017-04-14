@@ -2,7 +2,9 @@
 
 namespace Amacabr2\TagBundle\Repository;
 
+use Amacabr2\TagBundle\Entity\Tag;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\ResultSetMappingBuilder;
 
 /**
  * TagRepository
@@ -23,6 +25,27 @@ class TagRepository extends EntityRepository {
             ->setParameter('search', "%" . $q . "%")
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * Retourne les tags non utilisés
+     * @param $class
+     * @return array
+     */
+    public function findUnusedTags($class) {
+
+        $em = $this->getEntityManager();
+        $rsm = new ResultSetMappingBuilder($em);
+        $rsm->addRootEntityFromClassMetadata(Tag::class, 't');
+        $joinTable = $em->getClassMetadata($class)->getAssociationMapping('tags')['joinTable']['name'];
+        dump($joinTable);
+
+        return $em->createNativeQuery('
+            SELECT t.id, t.name FROM tag t 
+            LEFT JOIN post_tag ON post_tag.tag_id = t.id
+            WHERE post_tag.tag_id = NULL',
+        $rsm)->getResult();
+
     }
 
 }
