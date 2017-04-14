@@ -12,4 +12,17 @@ use Doctrine\ORM\EntityRepository;
  */
 class TagRepository extends EntityRepository {
 
+    /**
+     * Retourne des tags pour l'auto-complétation par rapport à $q permaettant ainsi une recherhce partiel
+     * @param string $q
+     * @return array
+     */
+    public function search(string $q): array {
+        return $this->createQueryBuilder('t')
+            ->where('t.name LIKE :search')
+            ->setParameter('search', "%" . $q . "%")
+            ->getQuery()
+            ->getResult();
+    }
+
 }

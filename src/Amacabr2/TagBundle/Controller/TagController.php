@@ -16,7 +16,12 @@ class TagController extends Controller {
      */
     public function indexAction(Request $request) {
         $tagRepository = $this->getDoctrine()->getRepository('TagBundle:Tag');
-        $tags = $tagRepository->findAll();
+        if ($q = $request->get('q')) {
+            $tags = $tagRepository->search($q);
+        } else {
+            $tags = $tagRepository->findAll();
+        }
+
         return $this->json($tags, 200, [], ['groups' => ['public']]);
     }
 
